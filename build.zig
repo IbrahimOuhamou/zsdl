@@ -1,23 +1,25 @@
+//بسم الله الرحمن الرحيم
+//la ilaha illa Allah mohammed rassoul Allah
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const t = target.result;
 
     const lib = b.addStaticLibrary(.{
         .name = "SDL2",
         .target = target,
         .optimize = optimize,
     });
+    const t = lib.target_info.target;
 
     lib.addIncludePath(.{ .path = "include" });
-    lib.addCSourceFiles(.{ .files = &generic_src_files });
+    lib.addCSourceFiles(&generic_src_files, &.{});
     lib.defineCMacro("SDL_USE_BUILTIN_OPENGL_DEFINITIONS", "1");
     lib.linkLibC();
     switch (t.os.tag) {
         .windows => {
-            lib.addCSourceFiles(.{ .files = &windows_src_files });
+            lib.addCSourceFiles(&windows_src_files, &.{});
             lib.linkSystemLibrary("setupapi");
             lib.linkSystemLibrary("winmm");
             lib.linkSystemLibrary("gdi32");
@@ -27,11 +29,8 @@ pub fn build(b: *std.Build) void {
             lib.linkSystemLibrary("ole32");
         },
         .macos => {
-            lib.addCSourceFiles(.{ .files = &darwin_src_files });
-            lib.addCSourceFiles(.{
-                .files = &objective_c_src_files,
-                .flags = &.{"-fobjc-arc"},
-            });
+            lib.addCSourceFiles(&darwin_src_files, &.{});
+            lib.addCSourceFiles(&objective_c_src_files, &.{"-fobjc-arc"});
             lib.linkFramework("OpenGL");
             lib.linkFramework("Metal");
             lib.linkFramework("CoreVideo");
