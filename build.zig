@@ -17,6 +17,7 @@ pub fn build(b: *std.Build) void {
     lib.addCSourceFiles(&generic_src_files, &.{});
     lib.defineCMacro("SDL_USE_BUILTIN_OPENGL_DEFINITIONS", "1");
     lib.linkLibC();
+    lib.linkSystemLibrary("freetype");
     switch (t.os.tag) {
         .windows => {
             lib.addCSourceFiles(&windows_src_files, &.{});
@@ -191,6 +192,11 @@ const generic_src_files = [_][]const u8{
     "src/joystick/hidapi/SDL_hidapi_xbox360w.c",
     "src/joystick/hidapi/SDL_hidapi_xboxone.c",
     "src/joystick/hidapi/SDL_hidapijoystick.c",
+
+    //SDL_ttf by the will of Allah
+    "src/SDL_ttf.c",
+    "src/glfont.c",
+    "src/showfont.c",
 };
 
 const windows_src_files = [_][]const u8{
