@@ -1,7 +1,12 @@
 .{
     .name = "SDL",
     .version = "2.26.3-5",
-    .dependencies = .{},
+    .dependencies = .{
+        //.zfreetype =
+        //.{
+        //  
+        //}
+    },
     .paths = .{
         "LICENSE.txt",
         "README.md",
